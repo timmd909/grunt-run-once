@@ -10,6 +10,8 @@
 
 module.exports = function(grunt) {
 
+	var _ = require('lodash');
+
 	grunt.task.runOnce = function () {
 		var things = grunt.task.parseArgs(arguments)
 			.map(grunt.task._taskPlusArgs, grunt.task);
