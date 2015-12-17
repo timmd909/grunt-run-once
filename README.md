@@ -22,75 +22,44 @@ this line of JavaScript:
 grunt.loadNpmTasks('grunt-run-once');
 ```
 
-## The "run_once" task
+## What's it do?
 
-### Overview
-In your project's Gruntfile, add a section named `run_once` to the data object
-passed into `grunt.initConfig()`.
+This plugin will add a `grunt.task.runOnce()` command that operates the
+same as `grunt.task.run()` with the eponymous function: it will only
+add tasks if they've not be called in the past.
 
-```js
-grunt.initConfig({
-  run_once: {
-    options: {
-      // Task-specific options go here.
-    },
-    your_target: {
-      // Target-specific file lists and/or options go here.
-    },
-  },
-});
-```
+Let's say you have the following tasks/aliases defined:
 
-### Options
+| Task          | Description                                            |
+|---------------|--------------------------------------------------------|
+| `test:qunit`  | Alias: `build:js`, `build:css`, `qunit`                |
+| `test:visual` | Alias: `build:js`, `build:css`, `casperjs`             |
+| `test`        | Alias: `test:qunit`, `test:visual`                     |
 
-#### options.separator
-Type: `String`
-Default value: `',  '`
+As you can see, if you run `test`, you're effectively building the
+JavaScript and CSS twice.
 
-A string value that is used to do something with whatever.
-
-#### options.punctuation
-Type: `String`
-Default value: `'.'`
-
-A string value that is used to do something else with whatever else.
-
-### Usage Examples
-
-#### Default Options
-In this example, the default options are used to do something with whatever. So if
-the `testing` file has the content `Testing` and the `123` file had the
-content `1 2 3`, the generated result would be `Testing, 1 2 3.`
+To avoid this problem, with this plugin you can declare the tasks like so:
 
 ```js
-grunt.initConfig({
-  run_once: {
-    options: {},
-    files: {
-      'dest/default_options': ['src/testing', 'src/123'],
-    },
-  },
+// ...
+grunt.registerTask('test:qunit', function () {
+	grunt.task.runOnce(['build:js', 'build:css', 'qunit']);
 });
+grunt.registerTask('test:visual', function () {
+	grunt.task.runOnce(['build:js', 'build:css', 'casperjs']);
+});
+grunt.registerTask('test', ['test:qunit', 'test:visual']);
+// ...
 ```
 
-#### Custom Options
-In this example, custom options are used to do something else with whatever else.
-So if the `testing` file has the content `Testing` and the `123` file had the
-content `1 2 3`, the generated result in this case would be `Testing: 1 2 3 !!!`
+So that now when you call the `test` task, it will run the following
+(in order):
 
-```js
-grunt.initConfig({
-  run_once: {
-    options: {
-      separator: ': ',
-      punctuation: ' !!!',
-    },
-    files: {
-      'dest/default_options': ['src/testing', 'src/123'],
-    },
-  },
-});
-```
+* `build:js`
+* `build:css`
+* `qunit`
+* `casperjs`
 
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style.
