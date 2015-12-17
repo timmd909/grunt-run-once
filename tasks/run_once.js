@@ -35,7 +35,6 @@ module.exports = function(grunt) {
 			var existing = _.filter(grunt.task._queue, {
 				'nameArgs': thing.nameArgs
 			});
-			console.log('Thing: ' + thing.nameArgs, existing);
 			return (existing.length === 0);
 		});
 
