@@ -1,0 +1,42 @@
+{
+  "name": "grunt-run-once",
+  "description": "Run a particular task only once",
+  "version": "0.1.0",
+  "homepage": "https://github.com/timmd909/grunt-run-once",
+  "author": {
+    "name": "Tim Doerzbacher",
+    "email": "tim@tim-doerzbacher.com",
+    "url": "http://www.tim-doerzbacher.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/timmd909/grunt-run-once.git"
+  },
+  "bugs": {
+    "url": "https://github.com/timmd909/grunt-run-once/issues"
+  },
+  "licenses": [
+    {
+      "type": "GPL",
+      "url": "https://github.com/timmd909/grunt-run-once/blob/master/LICENSE-GPL"
+    }
+  ],
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "scripts": {
+    "test": "grunt test"
+  },
+  "devDependencies": {
+    "grunt-contrib-jshint": "^0.9.2",
+    "grunt-contrib-clean": "^0.5.0",
+    "grunt-contrib-nodeunit": "^0.3.3",
+    "grunt": "~0.4.5"
+  },
+  "peerDependencies": {
+    "grunt": "~0.4.5"
+  },
+  "keywords": [
+    "gruntplugin"
+  ]
+}
