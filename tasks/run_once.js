@@ -10,41 +10,40 @@
 
 module.exports = function(grunt) {
 
-  // Please see the Grunt documentation for more information regarding task
-  // creation: http://gruntjs.com/creating-tasks
+	grunt.task.runOnce = function () {
+		var things = grunt.task.parseArgs(arguments)
+			.map(grunt.task._taskPlusArgs, grunt.task);
 
-  grunt.registerMultiTask('run_once', 'The best Grunt plugin ever.', function() {
-    // Merge task-specific and/or target-specific options with these defaults.
-    var options = this.options({
-      punctuation: '.',
-      separator: ', '
-    });
+		// remove duplicates in `things`
+		var uniqueThings = [], thing;
+		while (things.length) {
+			thing = things.shift();
 
-    // Iterate over all specified file groups.
-    this.files.forEach(function(f) {
-      // Concat specified files.
-      var src = f.src.filter(function(filepath) {
-        // Warn on and remove invalid source files (if nonull was set).
-        if (!grunt.file.exists(filepath)) {
-          grunt.log.warn('Source file "' + filepath + '" not found.');
-          return false;
-        } else {
-          return true;
-        }
-      }).map(function(filepath) {
-        // Read file source.
-        return grunt.file.read(filepath);
-      }).join(grunt.util.normalizelf(options.separator));
+			var dupes = _.filter(uniqueThings, {
+				'nameArgs': thing.nameArgs
+			});
 
-      // Handle options.
-      src += options.punctuation;
+			if (dupes.length === 0) {
+				uniqueThings.push(thing);
+			}
+		}
 
-      // Write the destination file.
-      grunt.file.write(f.dest, src);
+		// append the things if they haven't been added yet to the queue
+		uniqueThings = _.filter(uniqueThings, function (thing) {
+			var existing = _.filter(grunt.task._queue, {
+				'nameArgs': thing.nameArgs
+			});
+			console.log('Thing: ' + thing.nameArgs, existing);
+			return (existing.length === 0);
+		});
 
-      // Print a success message.
-      grunt.log.writeln('File "' + f.dest + '" created.');
-    });
-  });
+		// Add in the unique things
+		grunt.task.run(_.map(uniqueThings, function (thing) {
+			return thing.nameArgs;
+		}));
+
+		// keep the gravy chain rolling
+		return this;
+	};
 
 };
