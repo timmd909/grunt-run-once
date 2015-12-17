@@ -1,7 +1,7 @@
 {
   "name": "grunt-run-once",
   "description": "Run a particular task only once",
-  "license": "GPL",
+  "license": "BSD-2-Clause",
   "version": "0.1.0",
   "homepage": "https://github.com/timmd909/grunt-run-once",
   "author": {
