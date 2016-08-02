@@ -29,7 +29,7 @@ module.exports = function(grunt) {
     },
 
     // Configuration to be run (and then tested).
-    run_once: {
+    'run-once': {
       default_options: {
         options: {
         },

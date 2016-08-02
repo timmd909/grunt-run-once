@@ -35,39 +35,18 @@ module.exports = function(grunt) {
 
 	var _ = require('lodash');
 
-	grunt.task.runOnce = function () {
-		var things = grunt.task.parseArgs(arguments)
-			.map(grunt.task._taskPlusArgs, grunt.task);
+	var previouslyExecuted = [];
 
-		// remove duplicates in `things`
-		var uniqueThings = [], thing;
-		while (things.length) {
-			thing = things.shift();
+	grunt.registerTask('run-once', 'Only run a Grunt command once.', function () {
+		var command = (this.args).join(':');
 
-			var dupes = _.filter(uniqueThings, {
-				'nameArgs': thing.nameArgs
-			});
-
-			if (dupes.length === 0) {
-				uniqueThings.push(thing);
-			}
+		if (_.indexOf(previouslyExecuted, command) < 0) {
+			// this a new command. Make sure it's run
+			grunt.task.run(command);
+			previouslyExecuted.push(command);
+		} else {
+			grunt.log.writeln('Skipping ' + command);
 		}
-
-		// append the things if they haven't been added yet to the queue
-		uniqueThings = _.filter(uniqueThings, function (thing) {
-			var existing = _.filter(grunt.task._queue, {
-				'nameArgs': thing.nameArgs
-			});
-			return (existing.length === 0);
-		});
-
-		// Add in the unique things
-		grunt.task.run(_.map(uniqueThings, function (thing) {
-			return thing.nameArgs;
-		}));
-
-		// keep the gravy chain rolling
-		return this;
-	};
+	});
 
 };
