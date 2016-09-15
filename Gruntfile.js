@@ -50,9 +50,12 @@ module.exports = function(grunt) {
 	// By default, lint and run all tests.
 	grunt.registerTask('default', ['jshint', 'test']);
 
-	// Dummy task used for testing
-	grunt.registerTask('testmock', function () {
+	// Dummy tasks used for testing
+	grunt.registerTask('test:mock', function () {
 		grunt.log.writeln('##test##');
+	});
+	grunt.registerTask('test:do-you-even', function () {
+		grunt.log.writeln('ᕦ(ò_óˇ)ᕤ');
 	});
 
 };
