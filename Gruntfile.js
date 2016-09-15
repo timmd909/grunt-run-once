@@ -28,14 +28,6 @@ module.exports = function(grunt) {
 			tests: ['tmp']
 		},
 
-		// Configuration to be run (and then tested).
-		'run-once': {
-			'default_options': {
-			},
-			'custom_options': {
-			},
-		},
-
 		// Unit tests.
 		nodeunit: {
 			tests: ['test/*_test.js']
@@ -53,9 +45,17 @@ module.exports = function(grunt) {
 
 	// Whenever the "test" task is run, first clean the "tmp" dir, then run this
 	// plugin's task(s), then test the result.
-	grunt.registerTask('test', ['clean', 'run-once', 'nodeunit']);
+	grunt.registerTask('test', ['clean', 'nodeunit']);
 
 	// By default, lint and run all tests.
 	grunt.registerTask('default', ['jshint', 'test']);
+
+	// Dummy tasks used for testing
+	grunt.registerTask('test:mock', function () {
+		grunt.log.writeln('##test##');
+	});
+	grunt.registerTask('test:do-you-even', function () {
+		grunt.log.writeln('ᕦ(ò_óˇ)ᕤ');
+	});
 
 };
