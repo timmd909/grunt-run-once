@@ -1,6 +1,7 @@
 'use strict';
 
-var grunt = require('grunt');
+var grunt = require('grunt'),
+		exec = require('child_process').exec;
 
 /*
 	======== A Handy Little Nodeunit Reference ========
@@ -27,8 +28,43 @@ exports['run-once'] = {
 		// setup here if necessary
 		done();
 	},
-	simple_test: function (test) {
-		test.ok(true, 'Placeholder');
-		test.done();
+	no_options: function (test) {
+		test.expect(1);
+
+		exec('grunt run-once', {}, function(error, stdout) {
+			var found = stdout.indexOf('`run-once` called without options') > -1;
+			test.equal(found, true, 'No options throws error.');
+			test.done();
+		});
+	},
+	single_task: function (test) {
+		test.expect(1);
+		var execString = [
+			'grunt',
+			'run-once:testmock'
+		].join(' ');
+
+		exec(execString, {}, function(error, stdout) {
+			var count = stdout.match(/##test##/).length;
+			test.equal(count === 1, true, 'Task is only run once');
+			test.done();
+		});
+	},
+	multi_task: function (test) {
+		test.expect(1);
+		var execString = [
+			'grunt',
+			'run-once:testmock',
+			'run-once:testmock',
+			'run-once:testmock',
+			'run-once:testmock',
+			'run-once:testmock'
+		].join(' ');
+
+		exec(execString, {}, function(error, stdout) {
+			var count = stdout.match(/##test##/).length;
+			test.equal(count === 1, true, 'Task is only run once');
+			test.done();
+		});
 	}
 };
